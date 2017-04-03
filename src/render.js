@@ -38,19 +38,21 @@ xPattern
 var curTile
 
 var commands = {
-			'mark': markAsBomb,
-			'reveal': function() {
-				console.log("revealing")
-				revealTile(game, curTile.id)
-				speakTile(curTile)
-				update()
-			}
+	'mark': markAsBomb,
+	'reveal': reveal
 }
 
 annyang.addCommands(commands)
 
 console.log("staring speach recog")
 annyang.start()
+
+function reveal() {
+	console.log("revealing")
+	revealTile(game, curTile.id)
+	update()
+	speakTile(curTile)
+}
 
 function markAsBomb() {
 	console.log("marking")
@@ -95,8 +97,7 @@ svg.selectAll("g")
 	})
 	.attr("opacity", 0)
 	.on("mousedown", function(t) {
-		revealTile(game, t.id)
-		update()
+		reveal()
 	})
 	.on("mouseover", function(t) {
 		curTile = t
