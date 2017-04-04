@@ -7,95 +7,37 @@ var svg = d3.select("body")
 .attr("width", options.cols*20)
 .attr("height", options.rows*20);
 
-var defs = svg.append("defs")
-
-var xPattern = defs.append("pattern")
-	.attr("id", "x")
-	.attr("x", 0)
-	.attr("y", 0)
-	.attr("width", 20)
-	.attr("height", 20)
-	.attr("patternUnits", "userSpaceOnUse");
-
-xPattern
-	.append("line")
-		.attr("x1", 0)
-		.attr("y1", 0)
-		.attr("x2", 20)
-		.attr("y2", 20)
-		.attr("stroke", "black")
-		.attr("stroke-width", 2);
-
-xPattern
-	.append("line")
-		.attr("x1", 0)
-		.attr("y1", 20)
-		.attr("x2", 20)
-		.attr("y2", 0)
-		.attr("stroke", "black")
-		.attr("stroke-width", 2);
-
 var curTile
 
-var commands = {
-	'mark': markAsBomb,
-	'reveal': reveal
+var symbolType = {
+	'unknownOrNoThreats' : dot,
+	'marked' : cross,
+	'surroundingThreats': d3.symbolCircle
 }
 
-annyang.addCommands(commands)
-
-console.log("staring speach recog")
-annyang.start()
-
-function reveal() {
-	console.log("revealing")
-	revealTile(game, curTile.id)
-	update()
-	speakTile(curTile)
-}
-
-function markAsBomb() {
-	console.log("marking")
-	console.log(curTile)
-	curTile.isMarked = true	
-	speakTile(curTile)
-	update()
-}
-
-function speak(text) {
-	var msg = new SpeechSynthesisUtterance(text);
-	msg.rate = 1.2
-	window.speechSynthesis.speak(msg);
-}
-
-function speakTile(t) {
-	if(t.isMarked) {
-		speak("marked")
-		return
-	}
-	if(t.threatCount != 0) {
-		speak(t.threatCount)
-		return
-	}
-}
-
-function cancelSpeech() {
-	window.speechSynthesis.cancel();
-}
-
-svg.selectAll("g")
+var d3Tiles = svg.selectAll(".tile")
 	.data(game.tiles)
 	.enter()
-	.append("circle")
-	.attr("class", "tile")
+	.append("path")
+	.attr("d", d3.symbol().type(symbolType['unknownOrNoThreats']))
+	.attr("fill", "white")
 	.attr("stroke", "black")
-	.attr("cx",function(t) {
-		return (t.id % game.cols) * 20 + 10
-	})
-	.attr("cy",function(t) {
-		return (parseInt(t.id / game.cols)) * 20 + 10
-	})
+	.attr("transform", function(t) { 
+		return "translate(" + ((t.id % game.cols) * 20 + 10) + "," + 
+			((parseInt(t.id / game.cols)) * 20 + 10) + ")"; })
+
+var hoverTiles = svg.selectAll(".hoverBox")
+	.data(game.tiles)
+	.enter()
+	.append("rect")
+	.attr("class", "hoverBox")
 	.attr("opacity", 0)
+	.attr("x", function(t) { 
+		return (t.id % game.cols) * 20
+	})
+	.attr("y", function(t) {
+		return parseInt(t.id / game.cols) * 20
+	})
 	.on("mousedown", function(t) {
 		reveal()
 	})
@@ -106,27 +48,21 @@ svg.selectAll("g")
 	.on("mouseout", cancelSpeech);
 
 function updateD3Elements() {
-	svg.selectAll(".tile")
-		.attr("opacity", function(t) {
-			return (t.threatCount == 0 || !t.isRevealed) && !t.isMarked ? 0 : 100
+	d3Tiles
+		.attr("d", d3.symbol()
+			.type(function(t) {
+			if(t.isMarked) {return symbolType['marked'];}
+			else if(t.isRevealed && t.threatCount != 0) {return symbolType['surroundingThreats'];}
+			return symbolType['unknownOrNoThreats']
 			})
-		.attr("stroke", function(t) {
-			return t.isMarked == true ? "white" : "black"
-		})
-		.attr("fill", function(t) {
-			if(t.isMarked) {
-					return "url(#x)"
-				}
-			return "white"
-		});
+		);
 }
 
 function update() {
+	updateD3Elements()
 	if(game.isDead) {
 		revealMines(game)
-		updateD3Elements()
 		speak("Game over")
 		window.location.reload(true)
 	}
-	updateD3Elements()
 }
