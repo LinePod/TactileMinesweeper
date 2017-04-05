@@ -34,10 +34,8 @@ function speakTile(t) {
 		speak("marked")
 		return
 	}
-	if(t.threatCount != 0) {
-		speak(t.threatCount)
-		return
-	}
+	speak(t.threatCount)
+	return
 }
 
 function cancelSpeech() {
