@@ -1,4 +1,4 @@
-var options = {'cols':10, 'rows':10, 'mines':10}
+var options = {'cols':15, 'rows':15, 'mines':60}
 
 var game = createGame(options)
 
@@ -10,7 +10,7 @@ var svg = d3.select("body")
 var curTile
 
 var symbolType = {
-	'unknownOrNoThreats' : dot,
+	'unknownOrNoThreats' : empty,
 	'marked' : cross,
 	'surroundingThreats': d3.symbolCircle
 }
@@ -32,6 +32,8 @@ var hoverTiles = svg.selectAll(".hoverBox")
 	.append("rect")
 	.attr("class", "hoverBox")
 	.attr("opacity", 0)
+	.attr("width", 20)
+	.attr("height", 20)
 	.attr("x", function(t) { 
 		return (t.id % game.cols) * 20
 	})

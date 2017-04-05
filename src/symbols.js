@@ -5,7 +5,7 @@ var cross = {
     context.moveTo(5,-5);
     context.lineTo(-5,5);
   }
-};
+}
 
 var dot = {
 	draw: function(context, size) {
@@ -17,6 +17,6 @@ var dot = {
 	}
 }
 
-var emptySymbol = {
+var empty = {
 	draw : function(context, size){;}
-};
+}
