@@ -1,5 +1,3 @@
-var options = {'cols':15, 'rows':15, 'mines':60}
-
 var game = createGame(options)
 
 var svg = d3.select("body")
@@ -7,25 +5,31 @@ var svg = d3.select("body")
 .attr("width", options.cols*20)
 .attr("height", options.rows*20);
 
-var curTile
+var ctrlDown = false
 
-var symbolType = {
-	'unknownOrNoThreats' : empty,
-	'marked' : cross,
-	'surroundingThreats': d3.symbolCircle
+// To mark a field hold ctrl and click
+window.onmousemove = function(e) {
+	if(!e) e = window.event;
+	if(e.ctrlKey) {ctrlDown = true}
+	else {ctrlDown = false}
 }
 
+// Keeping track of mouse over current Tile
+var curTile
+
+// Create visible tile representations
 var d3Tiles = svg.selectAll(".tile")
 	.data(game.tiles)
 	.enter()
 	.append("path")
-	.attr("d", d3.symbol().type(symbolType['unknownOrNoThreats']))
+	.attr("d", d3.symbol().type(symbolType['unknown']))
 	.attr("fill", "white")
 	.attr("stroke", "black")
 	.attr("transform", function(t) { 
 		return "translate(" + ((t.id % game.cols) * 20 + 10) + "," + 
 			((parseInt(t.id / game.cols)) * 20 + 10) + ")"; })
 
+// Create hoverTiles for determining mouseposition and speechoutput
 var hoverTiles = svg.selectAll(".hoverBox")
 	.data(game.tiles)
 	.enter()
@@ -41,7 +45,12 @@ var hoverTiles = svg.selectAll(".hoverBox")
 		return parseInt(t.id / game.cols) * 20
 	})
 	.on("mousedown", function(t) {
+		if(ctrlDown) {
+			markAsBomb()			
+		}
+		else {
 		reveal()
+		}
 	})
 	.on("mouseover", function(t) {
 		curTile = t
@@ -49,14 +58,19 @@ var hoverTiles = svg.selectAll(".hoverBox")
 	})
 	.on("mouseout", cancelSpeech);
 
+
+// Update visual tiles
 function updateD3Elements() {
 	d3Tiles
 		.attr("d", d3.symbol()
 			.type(function(t) {
-			if(t.isMarked) {return symbolType['marked'];}
-			else if(t.isRevealed && t.threatCount != 0) {return symbolType['surroundingThreats'];}
-			return symbolType['unknownOrNoThreats']
-			})
+			if(t.isMarked) 
+				{return symbolType['marked'];}
+			if(t.isRevealed && t.threatCount != 0) 
+				{return symbolType['surroundingThreats'];}
+			if(t.isRevealed && t.threatCount == 0) 
+				{return symbolType['noThreats'];}
+			return symbolType['unknown'];})
 		);
 }
 
