@@ -18,7 +18,7 @@ window.onmousemove = function(e) {
 var curTile
 
 // Create visible tile representations
-var d3Tiles = svg.selectAll(".tile")
+var renderTiles = svg.selectAll(".tile")
 	.data(game.tiles)
 	.enter()
 	.append("path")
@@ -61,7 +61,7 @@ var hoverTiles = svg.selectAll(".hoverBox")
 
 // Update visual tiles
 function updateD3Elements() {
-	d3Tiles
+	renderTiles
 		.attr("d", d3.symbol()
 			.type(function(t) {
 			if(t.isMarked) 
