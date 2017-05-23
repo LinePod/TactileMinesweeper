@@ -81,4 +81,8 @@ function update() {
 		speak("Game over")
 		window.location.reload(true)
 	}
+	if(isSafe(game)) {
+		speak("Congratulations! You won!")
+		window.location.reload(true)
+	}
 }

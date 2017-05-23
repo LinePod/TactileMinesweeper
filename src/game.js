@@ -105,9 +105,12 @@ function isMine(game, tile) {
 
 function isSafe(game) {
   const tiles = game.tiles;
-  const mines = tiles.filter(prop('isMine'));
-  return mines.filter(prop('isRevealed')) === 0 &&
-    tiles.length - mines.length === tiles.filter(prop('isRevealed')).length;
+  for(var i = 0; i < tiles.length; ++i) {
+    if(tiles[i].isMine && !tiles[i].isMarked || tiles[i].isMarked && !tiles[i].isMarked) {
+      return false;
+    }
+  }
+  return true;
 }
 
 function isGameOver(game) {
