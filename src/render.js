@@ -2,6 +2,9 @@ var game = createGame(options)
 
 var svg = d3.select("body")
 .append("svg")
+.attr("version", 1.1)
+.attr("xmlns","http://www.w3.org/2000/svg")
+.attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
 .attr("width", options.cols*20)
 .attr("height", options.rows*20);
 

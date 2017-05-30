@@ -1,6 +1,6 @@
 var options = {'cols':15, 
                'rows':15,
-               'mines':5}
+               'mines':20}
 
 var symbolType = {
 	'unknown' : empty,
