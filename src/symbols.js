@@ -14,8 +14,8 @@ var dot = {
 	draw: function(context, size) {
 		context.moveTo(-1,0);
 		context.lineTo(0,1);
-		context.lineTo(1,0);
-		context.lineTo(0,-1);
+		//context.lineTo(1,0);
+		//context.lineTo(0,-1);
 		context.closePath();
 	}
 }
