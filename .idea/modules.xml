@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/TactileMinesweeper.iml" filepath="$PROJECT_DIR$/TactileMinesweeper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-framework/bluetoothlib/bluetoothlib.iml" filepath="$PROJECT_DIR$/android-framework/bluetoothlib/bluetoothlib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-framework/svgparser/svgparser.iml" filepath="$PROJECT_DIR$/android-framework/svgparser/svgparser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tactileMinesweeper/tactileMinesweeper.iml" filepath="$PROJECT_DIR$/tactileMinesweeper/tactileMinesweeper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-framework/webapplib/webapplib.iml" filepath="$PROJECT_DIR$/android-framework/webapplib/webapplib.iml" />
+    </modules>
+  </component>
+</project>
