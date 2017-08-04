@@ -3,7 +3,10 @@ function reveal() {
 	revealTile(game, curTile.id)
 	update()
 	speakTile(curTile)
+    printSVG();
 }
+
+
 
 function markAsBomb() {
 	console.log("marking")
@@ -11,9 +14,11 @@ function markAsBomb() {
 	curTile.isMarked = true	
 	speakTile(curTile)
 	update()
+    printSVG();
 }
 
 function speak(text) {
+    console.log("speaking text " + text)
 	Android.speak(text);
 }
 
@@ -38,9 +43,7 @@ function handleSpeech(speechInput){
 
     if (speechInput.includes("mark")){
         markAsBomb();
-        printSVG();
     } else if (speechInput.includes("reveal")){
         reveal();
-        printSVG();
     }
 }

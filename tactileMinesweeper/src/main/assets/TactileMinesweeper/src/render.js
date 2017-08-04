@@ -7,25 +7,29 @@ var svg = d3.select("body")
 .attr("id","svg")
 .attr("xmlns","http://www.w3.org/2000/svg")
 .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
-.attr("width", options.cols*20 + 100)
-.attr("height", options.rows*20);
-
+.attr("width", 202)
+.attr("height", 250)
+.attr("viewBox", "0 0 " + (options.cols*20 + 100) + " " + options.rows*20);
+//.attr("width", options.cols*20 + 100)
+//.attr("height", options.rows*20);
 
 var defs = svg.append("defs")
+
 
 defs.append("pattern")
 	.attr("id", "triggerPlateau")
 	.attr("x", 0)
 	.attr("y", 0)
 	.attr("width", 100)
-	.attr("height", 2)
+	.attr("height", 10)
 	.attr("patternUnits", "userSpaceOnUse")
-	.append("line")
+	.append("rect")
 		.attr("x1", 0)
 		.attr("y1", 0)
 		.attr("x2", 100)
-		.attr("y2", 0)
-		.attr("stroke", "black");
+		.attr("y2", 10)
+		.attr("stroke", "black")
+		.attr("fill", "white");
 
 
 //if we want to trigger the speech input by tapping on a special area on the paper
@@ -33,11 +37,13 @@ function triggerSpeechInput(){
     Android.triggerSpeechInput();
 }
 
+//plateau to trigger the speech input
+
 svg.append("rect")
 .attr("x", 300)
 .attr("y",0)
 .attr("width", 100)
-.attr("height", 200)
+.attr("height", 100)
 .attr("fill", function(){return "url(#triggerPlateau)"})
 .attr("stroke", function(){return "black"})
 .on("click",triggerSpeechInput);
@@ -45,12 +51,12 @@ svg.append("rect")
 var ctrlDown = false
 
 // To mark a field hold ctrl and click
-/*window.onmousemove = function(e) {
+window.onmousemove = function(e) {
 	if(!e) e = window.event;
 	if(e.ctrlKey) {ctrlDown = true}
 	else {ctrlDown = false}
 }
-*/
+
 
 // Keeping track of mouse over current Tile
 var curTile
@@ -73,7 +79,8 @@ var hoverTiles = svg.selectAll(".hoverBox")
 	.enter()
 	.append("rect")
 	.attr("class", "hoverBox")
-	.attr("opacity", 0)
+	.attr("stroke", "none")
+	.attr("fill", "white")
 	.attr("width", 20)
 	.attr("height", 20)
 	.attr("x", function(t) { 
@@ -87,16 +94,16 @@ var hoverTiles = svg.selectAll(".hoverBox")
 		curTile = t
 		speakTile(t)
 	})
-	.on("mouseout", cancelSpeech);
+	.on("mouseout", cancelSpeech)
 
-/*.on("mousedown", function(t) {
+.on("mousedown", function(t) {
   		if(ctrlDown) {
   			markAsBomb()
   		}
   		else {
   		reveal()
   		}
-  	})*/
+  	})
 // Update visual tiles
 function updateD3Elements() {
 	renderTiles

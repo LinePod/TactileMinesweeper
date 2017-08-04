@@ -40,5 +40,6 @@ var miniPlateau = {
 }
 
 var empty = {
-	draw : function(context, size){;}
+	draw : function(context, size){
+		context.moveTo(0,0);}
 }
