@@ -1,4 +1,9 @@
 var game = createGame(options)
+var lastHoveredElement = null
+var linepodNS = "http://hpi.de/baudisch/linepod";
+const linepodVersion = "linepod:version";
+
+d3.namespaces.linepod = linepodNS;
 
 
 var svg = d3.select("body")
@@ -7,9 +12,11 @@ var svg = d3.select("body")
 .attr("id","svg")
 .attr("xmlns","http://www.w3.org/2000/svg")
 .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
-.attr("width", 202)
-.attr("height", 250)
-.attr("viewBox", "0 0 " + (options.cols*20 + 100) + " " + options.rows*20);
+.attr("width", 200)
+.attr("height", 270)
+.attr("y",paperA4Yoffset)
+.attr("viewBox", "0 0 " + (options.cols*20 + 100) + " " + options.rows*20)
+.attr("preserveAspectRatio", "xMinYMin meet");
 //.attr("width", options.cols*20 + 100)
 //.attr("height", options.rows*20);
 
@@ -24,27 +31,30 @@ defs.append("pattern")
 	.attr("height", 10)
 	.attr("patternUnits", "userSpaceOnUse")
 	.append("rect")
-		.attr("x1", 0)
-		.attr("y1", 0)
-		.attr("x2", 100)
-		.attr("y2", 10)
+		.attr("x", 0)
+		.attr("y", 0)
+		.attr("width", 100)
+		.attr("height", 10)
 		.attr("stroke", "black")
 		.attr("fill", "white");
 
 
 //if we want to trigger the speech input by tapping on a special area on the paper
 function triggerSpeechInput(){
+
     Android.triggerSpeechInput();
+
 }
 
 //plateau to trigger the speech input
 
 svg.append("rect")
-.attr("x", 300)
+.attr("x", options.cols*20)
 .attr("y",0)
+.attr("id", "speechTrigger")
 .attr("width", 100)
 .attr("height", 100)
-.attr("fill", function(){return "url(#triggerPlateau)"})
+.attr("fill", function(){return "url(#triggerPlateau)";})
 .attr("stroke", function(){return "black"})
 .on("click",triggerSpeechInput);
 
@@ -116,7 +126,9 @@ function updateD3Elements() {
 			if(t.isRevealed && t.threatCount == 0) 
 				{return symbolType['noThreats'];}
 			return symbolType['unknown'];})
-		);
+		)
+		.attr(linepodVersion, svgVersionNr);
+		printSVG();
 }
 
 function update() {

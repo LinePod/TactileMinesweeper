@@ -3,10 +3,10 @@ var commands = {
 	'reveal': reveal
 }
 
-annyang.addCommands(commands)
+//annyang.addCommands(commands)
 
 console.log("staring speach recog")
-annyang.start()
+//annyang.start()
 
 function reveal() {
 	console.log("revealing")

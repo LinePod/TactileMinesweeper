@@ -161,4 +161,5 @@ function printSVG(){
 }
 
 
-printSVG();
+//printSVG();
+simulateFirstPrint();
