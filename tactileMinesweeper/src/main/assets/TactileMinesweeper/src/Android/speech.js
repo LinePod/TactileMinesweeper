@@ -46,7 +46,7 @@ function handleSpeech(speechInput){
 
     if (speechInput.includes("mark")){
         markAsBomb();
-    } else if (speechInput.includes("reveal")){
+    } else if (speechInput.includes("reveal") || speechInput.includes("review")){
         reveal();
     }
 }
