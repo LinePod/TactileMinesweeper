@@ -1,9 +1,12 @@
 function reveal() {
 	console.log("revealing")
 	revealTile(game, curTile.id)
-	update()
+	if (!isGameOver(game)){
+        update()
+        printSVG();
+    }
 	speakTile(curTile)
-    printSVG();
+
 }
 
 

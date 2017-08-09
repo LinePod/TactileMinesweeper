@@ -3,6 +3,7 @@ var lastHoveredElement = null
 var linepodNS = "http://hpi.de/baudisch/linepod";
 const linepodVersion = "linepod:version";
 const lastTimestamp = "linepod:lastTimestamp";
+const lastDAttribute = "linepod:lastDAttribute";
 
 d3.namespaces.linepod = linepodNS;
 
@@ -48,7 +49,7 @@ function triggerSpeechInput(){
 }
 
 //plateau to trigger the speech input
-
+/*
 svg.append("rect")
 .attr("x", options.cols*20)
 .attr("y",0)
@@ -58,7 +59,7 @@ svg.append("rect")
 .attr("fill", function(){return "url(#triggerPlateau)";})
 .attr("stroke", function(){return "black"})
 .on("click",triggerSpeechInput);
-
+*/
 var ctrlDown = false
 
 // To mark a field hold ctrl and click
@@ -78,6 +79,7 @@ var renderTiles = svg.selectAll(".tile")
 	.enter()
 	.append("path")
 	.attr("d", d3.symbol().type(symbolType['unknown']))
+	.attr(lastDAttribute, function(t) { return d3.select(this).attr("d")})
 	.attr("fill", "white")
 	.attr("stroke", "black")
 	.attr("transform", function(t) { 
@@ -106,20 +108,12 @@ var hoverTiles = svg.selectAll(".hoverBox")
 		curTile = t
 		var el = d3.select(this);
 		console.log(el.attr(lastTimestamp));
-        if (Date.now() - el.attr(lastTimestamp) > 200){
+        if (Date.now() - el.attr(lastTimestamp) > 500){
             speakTile(t)
         }
 	})
 	.on("mouseout", cancelSpeech)
 
-.on("mousedown", function(t) {
-  		if(ctrlDown) {
-  			markAsBomb()
-  		}
-  		else {
-  		reveal()
-  		}
-  	})
 // Update visual tiles
 function updateD3Elements() {
 	renderTiles
@@ -133,8 +127,16 @@ function updateD3Elements() {
 				{return symbolType['noThreats'];}
 			return symbolType['unknown'];})
 		)
-		.attr(linepodVersion, svgVersionNr);
-		printSVG();
+		.attr(linepodVersion, function() {
+
+		var lastVersionNr = d3.select(this).attr(linepodVersion);
+		if (d3.select(this).attr(lastDAttribute) != d3.select(this).attr("d")){
+		    console.log("new element -> current version nr " + svgVersionNr);
+		    return svgVersionNr;
+		}
+		return lastVersionNr;
+		})
+		.attr(lastDAttribute, function() { return d3.select(this).attr("d")});
 }
 
 function update() {
