@@ -2,6 +2,7 @@ var game = createGame(options)
 var lastHoveredElement = null
 var linepodNS = "http://hpi.de/baudisch/linepod";
 const linepodVersion = "linepod:version";
+const lastTimestamp = "linepod:lastTimestamp";
 
 d3.namespaces.linepod = linepodNS;
 
@@ -93,6 +94,7 @@ var hoverTiles = svg.selectAll(".hoverBox")
 	.attr("fill", "white")
 	.attr("width", 20)
 	.attr("height", 20)
+	.attr(lastTimestamp, Date.now())
 	.attr("x", function(t) { 
 		return (t.id % game.cols) * 20
 	})
@@ -102,7 +104,11 @@ var hoverTiles = svg.selectAll(".hoverBox")
 
 	.on("mouseover", function(t) {
 		curTile = t
-		speakTile(t)
+		var el = d3.select(this);
+		console.log(el.attr(lastTimestamp));
+        if (Date.now() - el.attr(lastTimestamp) > 200){
+            speakTile(t)
+        }
 	})
 	.on("mouseout", cancelSpeech)
 

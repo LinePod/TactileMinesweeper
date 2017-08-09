@@ -1,7 +1,7 @@
 var maxAirbarHeight = 1936;
 var maxAirbarWidth = 3452;
-var airbarA4OffsetX = -450;
-var airbarA4OffsetY = 0;
+var airbarA4OffsetX = -650;
+var airbarA4OffsetY = -100;
 
 //maxAirbarWidth / maxAirbarHeight = 1,78305
 var lastx2=0;
